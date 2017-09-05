@@ -5,18 +5,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="basicDataSource" />
-	</bean>
-	
-	<bean id="bankDao" class="com.bo.demo.dao.BankDao">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="basicDataSource" />
-	</bean>
-
 	<bean id="baseBankService" class="com.bo.demo.service.impl.BaseBankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 		<property name="txManager" ref="transactionManager" />

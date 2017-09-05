@@ -17,5 +17,17 @@
 		<property name="maxWaitMillis" value="${db.maxWaitMillis}" />
 		<property name="validationQuery" value="${db.validationQuery}" />
 	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="basicDataSource" />
+	</bean>
+	
+	<bean id="bankDao" class="com.bo.demo.dao.BankDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
 
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="basicDataSource" />
+	</bean>
+	
 </beans>

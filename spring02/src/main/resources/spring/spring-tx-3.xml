@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 基于TransactionInterceptor的声明式事务管理 配置-->
+	
+	<!-- 事务AOP advice -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
+		<property name="transactionManager" ref="transactionManager"/>
+		<!-- 用来定义事务规则的Properties类型属性 -->
+		<!-- 该属性的每一个键值对中，键指定事务规则匹配的方法名(可使用通配符)，而值就表示相应方法所应用的事务属性 -->
+		<!-- 指定事务属性的取值规则(省略的取默认值)：传播行为 [，隔离级别] [，只读属性] [，超时属性] [不影响提交的异常] [，导致回滚的异常] -->
+		<property name="transactionAttributes">
+			<props>
+				<!-- 表示所有名为"transfer"的方法使用 PROPAGATION_REQUIRED 事务传播行为，事务的隔离级别是 ISOLATION_READ_COMMITTED，超时时间为20秒，当事务抛出NullPointerException类型的异常，则仍然提交；当抛出 ArithmeticException 类型的异常时必须回滚事务。这里没有指定"readOnly"，表示事务不是只读的。 -->
+				<prop key="transfer">PROPAGATION_REQUIRED,ISOLATION_READ_COMMITTED,timeout_20,+NullPointerException,-ArithmeticException</prop>
+				<!-- 其他方法配置示例 -->
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 配置目标类 -->
+	<bean id="bankServiceTarget" class="com.bo.demo.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	
+	<!-- 声明AOP代理基类,便于通过父子 Bean的方式来复用 TransactionInterceptor的配置 -->
+	<bean id="baseProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interceptorNames">
+			<list>
+				<idref bean="transactionInterceptor"/> <!-- 等效于 <value>transactionInterceptor</value> -->
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置一个代理服务Bean,通过 ProxyFactoryBean来组装target和advice -->
+	<bean id="bankService" parent="baseProxy">
+		<!-- 这里未声明代理接口,默认为目标类实现的所有接口 -->
+		<property name="target" ref="bankServiceTarget" />
+	</bean>
+	
+	<!--
+		事务属性<transactionAttributes>的取值说明:
+		1.传播行为是唯一必须设置的属性，其他都可以忽略，Spring为我们提供了合理的默认值。
+		2.传播行为的取值必须以“PROPAGATION_”开头，具体包括：PROPAGATION_MANDATORY、PROPAGATION_NESTED、PROPAGATION_NEVER、PROPAGATION_NOT_SUPPORTED、PROPAGATION_REQUIRED、PROPAGATION_REQUIRES_NEW、PROPAGATION_SUPPORTS，共七种取值。
+		3.隔离级别的取值必须以“ISOLATION_”开头，具体包括：ISOLATION_DEFAULT、ISOLATION_READ_COMMITTED、ISOLATION_READ_UNCOMMITTED、ISOLATION_REPEATABLE_READ、ISOLATION_SERIALIZABLE，共五种取值。
+		4.如果事务是只读的，那么我们可以指定只读属性，使用“readOnly”指定。否则我们不需要设置该属性。
+		5.超时属性的取值必须以“timeout_”开头，后面跟一个int类型的值，表示超时时间，单位是秒。
+		6.不影响提交的异常是指，即使事务中抛出了这些类型的异常，事务任然正常提交。必须在每一个异常的名字前面加上“+”。异常的名字可以是类名的一部分。比如“+RuntimeException”、“+tion”等等。
+		7.导致回滚的异常是指，当事务中抛出这些类型的异常时，事务将回滚。必须在每一个异常的名字前面加上“-”。异常的名字可以是类名的全部或者部分，比如“-RuntimeException”、“-tion”等等。 
+	-->
+	
+</beans>

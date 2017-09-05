@@ -14,7 +14,7 @@ import com.bo.demo.entity.Account;
 import com.bo.demo.service.BankService;
 
 /**
- * @Description 基于 TransactionTemplate 的编程式事务管理
+ * @Description 基于TransactionTemplate的编程式事务管理
  * @author 王博
  * @version 2017年9月5日　下午1:54:17
  */
@@ -25,8 +25,13 @@ public class TemplateBankServiceImpl implements BankService {
 	
 	@Override
 	public boolean transfer(final int fromId, final int toId, final double amount) {
+		/**
+		 * TransactionCallbackWithoutResult接口中定义了一个 doInTransactionWithoutResult()方法，
+		 * TransactionCallbackWithoutResult接口主要用于事务过程中不需要返回值的情况。
+		 * 当然，对于不需要返回值的情况，我们仍然可以使用 TransactionCallback接口，并在方法中返回任意值即可。
+		 * */
+		
 		return transactionTemplate.execute(new TransactionCallback<Boolean>() {
-
 			@Override
 			public Boolean doInTransaction(TransactionStatus txStatus) {
 				/*这里可以使用默认的事务提交和回滚规则，这样在业务代码中就不需要显式调用任何事务管理的 API*/

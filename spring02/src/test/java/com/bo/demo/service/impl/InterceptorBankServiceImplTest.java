@@ -15,11 +15,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.bo.demo.service.BankService;
 
 /**
- * @Description 基于底层 API的编程式事务管理 测试
+ * @Description 基于TransactionInterceptor的声明式事务管理 测试
  * @author 王博
- * @version 2017年9月4日　下午10:58:29
+ * @version 2017年9月5日　下午11:07:39
  */
-public class BaseBankServiceImplTest {
+public class InterceptorBankServiceImplTest {
 
 	private static ApplicationContext ctx;
 	
@@ -56,14 +56,10 @@ public class BaseBankServiceImplTest {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * Test method for {@link com.bo.demo.service.impl.BaseBankServiceImpl#transfer(int, int, double)}.
-	 * @throws Exception 
-	 */
 	@Test
-	public void testTransfer() throws Exception {
-		BankService bankService = (BankService) ctx.getBean("baseBankService");
-		boolean result = bankService.transfer(2, 1, 50);// 转账成功或失败
+	public void test() throws Exception {
+		BankService bankService = (BankService) ctx.getBean("bankService");
+		boolean result = bankService.transfer(2, 1, 10);// 转账成功或失败
 		assertEquals("转账事务出错!", true, result);
 	}
 

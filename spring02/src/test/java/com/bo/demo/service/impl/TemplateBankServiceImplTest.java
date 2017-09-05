@@ -2,6 +2,8 @@ package com.bo.demo.service.impl;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,7 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.bo.demo.service.BankService;
 
 /**
- * @Description 
+ * @Description 基于TransactionTemplate的编程式事务管理 测试
  * @author 王博
  * @version 2017年9月5日　下午2:18:29
  */
@@ -56,9 +58,10 @@ public class TemplateBankServiceImplTest {
 
 	/**
 	 * Test method for {@link com.bo.demo.service.impl.TemplateBankServiceImpl#transfer(int, int, double)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testTransfer() {
+	public void testTransfer() throws Exception {
 		BankService templateBankService = (BankService) ctx.getBean("templateBankService");
 		boolean result = templateBankService.transfer(1, 2, 10);
 		assertEquals("转账出错", true, result);

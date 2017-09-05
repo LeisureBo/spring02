@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 基于TransactionInterceptor的声明式事务管理 [简化配置]:Spring经典的声明式事务管理-->
+	
+	<!-- 配置目标类 -->
+	<bean id="bankServiceTarget" class="com.bo.demo.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	
+	<!-- 将TransactionInterceptor和ProxyFactoryBean的配置合二为一 -->
+	<bean id="bankService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<!-- target为必需属性,不能分离为父子bean方式,只能显式为每一个业务类配置一个TransactionProxyFactoryBean-->
+		<property name="target" ref="bankServiceTarget" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="transfer">PROPAGATION_REQUIRED,+NullPointerException,-ArithmeticException</prop>
+				<!-- 其他方法配置示例 -->
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

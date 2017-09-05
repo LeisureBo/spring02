@@ -5,6 +5,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
+	<!-- 基于底层 API的编程式事务管理 配置 -->
+	
 	<bean id="baseBankService" class="com.bo.demo.service.impl.BaseBankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 		<property name="txManager" ref="transactionManager" />

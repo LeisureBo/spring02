@@ -45,7 +45,7 @@ public class BankServiceImpl implements BankService {
 					msg = "账号'"+fromId+"'成功给账号'"+toId+"'转账 "+"$"+amount;
 					/*默认:unchecked异常和error会导致回滚,checked异常不会到导致回滚*/
 //					int i = 1 / 0;
-//					testStr.toString();
+					testStr.toString();
 //					FileInputStream fis = new FileInputStream(new File("D://123.txt"));
 					result = true;
 				}

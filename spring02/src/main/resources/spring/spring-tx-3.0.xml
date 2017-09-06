@@ -7,7 +7,7 @@
 
 	<!-- 基于TransactionInterceptor的声明式事务管理 配置-->
 	
-	<!-- 事务AOP advice -->
+	<!-- 事务管理拦截器 -->
 	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
 		<property name="transactionManager" ref="transactionManager"/>

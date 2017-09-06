@@ -23,9 +23,9 @@ public class UserServiceImpl implements UserService {
 	public boolean batchUpdateUser(User u1, User u2) throws FileNotFoundException {
 		int ret1 = userDao.updateUser(u1);
 //		int i = 1 / 0;
-//		testStr.toString();
+		testStr.toString();
 		int ret2 = userDao.updateUser(u2);
-		FileInputStream fis = new FileInputStream(new File("D://123.txt"));
+//		FileInputStream fis = new FileInputStream(new File("D://123.txt"));
 		if(ret1 == 1 && ret2 == 1){
 			System.out.println("批量更新成功!");
 			return true;

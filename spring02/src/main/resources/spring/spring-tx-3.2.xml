@@ -7,7 +7,7 @@
 	
 	<!-- 基于TransactionInterceptor的声明式事务管理:利用BeanNameAutoProxyCreator自动创建事务代理 -->
 	
-	<!-- 事务AOP advice1 -->
+	<!-- 事务管理拦截器1 -->
 	<bean id="transactionInterceptor1" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
 		<property name="transactionManager" ref="transactionManager"/>
@@ -22,7 +22,7 @@
 		</property>
 	</bean>
 	
-	<!-- 事务AOP advice2 -->
+	<!-- 事务管理拦截器2 -->
 	<bean id="transactionInterceptor2" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
 		<property name="transactionManager" ref="transactionManager"/>
@@ -32,7 +32,7 @@
 		<property name="transactionAttributes">
 			<props>
 				<!-- 指定batchUpdate开头的方法使用PROPAGATION_REQUIRED事务传播行为;抛出任何异常均回滚 -->
-				<prop key="batchUpdate*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="batchUpdate*">PROPAGATION_REQUIRED,+NullPointerException,-Exception</prop>
 			</props>
 		</property>
 	</bean>
@@ -49,6 +49,7 @@
 
 	<!-- 通过目标类调用业务方法时，将由BeanNameAutoProxyCreator自动创建的事务代理执行 -->
 	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- <property name="proxyTargetClass" value="true" /> -->
 		<!-- 可以是Service或DAO层(最好是针对业务层*Service) -->
 		<property name="beanNames">
 			<list>

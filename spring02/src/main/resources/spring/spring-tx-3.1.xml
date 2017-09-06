@@ -13,9 +13,8 @@
 	</bean>
 	
 	<!-- 将TransactionInterceptor和ProxyFactoryBean的配置合二为一 -->
-	<bean id="bankService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<!-- target为必需属性,不能分离为父子bean方式,只能显式为每一个业务类配置一个TransactionProxyFactoryBean-->
-		<property name="target" ref="bankServiceTarget" />
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" lazy-init="true" abstract="true">
+		<!-- target在这里为必需属性,将bean声明为"abstract=true"可分离为父子bean方式-->
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="transactionAttributes">
 			<props>
@@ -25,6 +24,14 @@
 				<prop key="update*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
+	</bean>
+	
+	<!-- 声明具体的业务代理类，继承baseTransactionProxy -->
+	<bean id="bankService" parent="baseTransactionProxy">
+		<!-- 这里未声明代理接口,默认为目标类实现的所有接口 -->
+		<property name="target" ref="bankServiceTarget" />
+		<!-- 此属性指定目标类本省是否是代理的对象(默认false),如果目标类没有实现任何类,就设为true代表自己(使用cglib代理) -->
+		<property name="proxyTargetClass" value="false" />
 	</bean>
 	
 </beans>

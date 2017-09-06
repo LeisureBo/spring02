@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 基于 <tx>命名空间的声明式事务管理 -->
+	
+	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	
+	<tx:advice id="bankAdvice" transaction-manager="transactionManager">
+		<!-- 指定拦截方法的事务属性,如果不指定将使用默认值 -->
+		<tx:attributes>
+			<tx:method name="test" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" no-rollback-for="java.lang.NullPointerException" />
+			<!-- 其他示例 -->
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="batchUpdate*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config> <!-- aop代理设置:<aop:config proxy-target-class="true">   -->
+		<aop:pointcut id="bankPointcut" expression="execution(com.bo.demo.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="bankAdvice" pointcut-ref="bankPointcut" />
+	</aop:config>
+</beans>

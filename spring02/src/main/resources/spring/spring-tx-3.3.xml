@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 基于TransactionInterceptor的声明式事务管理:利用BeanNameAutoProxyCreator自动创建事务代理 [优化配置] -->
+
+	<!-- 声明事务advice -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+	
+	<!-- 自动代理还有一种用法就是结合正则表达式和advice使用 -->
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+	
+	<!-- 使用PointAdvisor来指定事务切入点, 常用的有三种(参考spring-aop-2):DefaultPointcutAdvisor,RegexpMethodPointcutAdvisor和 NameMatchMethodPointcutAdvisor -->
+	<bean id="regexpMethodPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="transactionInterceptor" />
+		<!-- 正则表达式规则 :匹配的是方法的完整路径 例:com.java.ingo.service.impl.BaseBusiness.add -->
+		<property name="patterns">
+			<list>
+				<!-- 匹配所有方法 -->
+				<value>.*</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

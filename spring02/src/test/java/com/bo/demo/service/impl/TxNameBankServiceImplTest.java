@@ -12,17 +12,14 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.bo.demo.entity.Account;
-import com.bo.demo.entity.User;
 import com.bo.demo.service.BankService;
-import com.bo.demo.service.UserService;
 
 /**
- * @Description 基于TransactionInterceptor的声明式事务管理 测试
+ * @Description 基于 <tx>命名空间的声明式事务管理 测试
  * @author 王博
- * @version 2017年9月5日　下午11:07:39
+ * @version 2017年9月6日　上午10:08:01
  */
-public class InterceptorBankServiceImplTest {
+public class TxNameBankServiceImplTest {
 
 	private static ApplicationContext ctx;
 	
@@ -62,15 +59,8 @@ public class InterceptorBankServiceImplTest {
 	@Test
 	public void test() throws Exception {
 		BankService bankService = (BankService) ctx.getBean("bankService");
-		boolean result = bankService.transfer(1, 2, 10);// 转账成功或失败
+		boolean result = bankService.transfer(2, 1, 10);// 转账成功或失败
 		assertEquals("转账事务出错!", true, result);
-		
-		/** spring-tx-3.2  测试专用 */
-//		UserService userService = (UserService) ctx.getBean("userService");
-//		User u1 = new User(1,"bo","12345",new Account(1,100));
-//		User u2 = new User(2,"lin","1993", new Account(2,100));
-//		boolean result2 = userService.batchUpdateUser(u1, u2);
-//		assertEquals("批量更新用户事务出错!", true, result2);
 	}
 
 }

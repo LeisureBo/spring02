@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 基于TransactionInterceptor的声明式事务管理:利用BeanNameAutoProxyCreator自动创建事务代理 -->
+	
+	<!-- 事务AOP advice1 -->
+	<bean id="transactionInterceptor1" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
+		<property name="transactionManager" ref="transactionManager"/>
+		<!-- 用来定义事务规则的Properties类型属性 -->
+		<!-- 该属性的每一个键值对中，键指定事务规则匹配的方法名(可使用通配符)，而值就表示相应方法所应用的事务属性 -->
+		<!-- 指定事务属性的取值规则(省略的取默认值)：传播行为 [，隔离级别] [，只读属性] [，超时属性] [不影响提交的异常] [，导致回滚的异常] -->
+		<property name="transactionAttributes">
+			<props>
+				<!-- 表示所有名为"transfer"的方法使用 PROPAGATION_REQUIRED 事务传播行为，事务的隔离级别是 ISOLATION_READ_COMMITTED，超时时间为20秒，当事务抛出NullPointerException类型的异常，则仍然提交；当抛出 ArithmeticException 类型的异常时必须回滚事务。这里没有指定"readOnly"，表示事务不是只读的。 -->
+				<prop key="transfer">PROPAGATION_REQUIRED,ISOLATION_READ_COMMITTED,timeout_20,+NullPointerException,-ArithmeticException</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 事务AOP advice2 -->
+	<bean id="transactionInterceptor2" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<!-- 指定一个事务管理器并将具体事务相关的操作委托给它-->
+		<property name="transactionManager" ref="transactionManager"/>
+		<!-- 用来定义事务规则的Properties类型属性 -->
+		<!-- 该属性的每一个键值对中，键指定事务规则匹配的方法名(可使用通配符)，而值就表示相应方法所应用的事务属性 -->
+		<!-- 指定事务属性的取值规则(省略的取默认值)：传播行为 [，隔离级别] [，只读属性] [，超时属性] [不影响提交的异常] [，导致回滚的异常] -->
+		<property name="transactionAttributes">
+			<props>
+				<!-- 指定batchUpdate开头的方法使用PROPAGATION_REQUIRED事务传播行为;抛出任何异常均回滚 -->
+				<prop key="batchUpdate*">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 配置目标类 -->
+	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	
+	<!-- 配置目标类 -->
+	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+
+	<!-- 通过目标类调用业务方法时，将由BeanNameAutoProxyCreator自动创建的事务代理执行 -->
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- 可以是Service或DAO层(最好是针对业务层*Service) -->
+		<property name="beanNames">
+			<list>
+				<!-- 此处使用通配符最佳,适用于业务类很多的情况.当然也可指定单个业务bean 如:bankService -->
+				<value>*Service</value>
+			</list>
+		</property>
+		<!-- 以上声明的目标类调用业务方法时,将会根据以下声明的Advice中的事务规则去匹配,如果匹配则该方法将作为一个事务执行 -->
+		<!-- 以下声明的transactionInterceptor与上面声明的目标类并不构成对应关系,调用的业务方法会在下面进行查找匹配 -->
+		<property name="interceptorNames">
+			<list>
+				<!-- 实际上,这里只需声明一个transactionInterceptor,在transactionAttributes属性中声明所有匹配方法即可 -->
+				<value>transactionInterceptor2</value>
+				<value>transactionInterceptor1</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

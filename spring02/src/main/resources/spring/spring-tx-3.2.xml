@@ -47,6 +47,7 @@
 		<property name="userDao" ref="userDao" />
 	</bean>
 
+	<!-- 基于BeanNameAutoProxyCreator的自动代理:它实现了BeanPostProcessor和Ordered接口,它会根据设置的Bean名称表达式以及拦截器进行匹配来创建代理 -->
 	<!-- 通过目标类调用业务方法时，将由BeanNameAutoProxyCreator自动创建的事务代理执行 -->
 	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<!-- <property name="proxyTargetClass" value="true" /> -->

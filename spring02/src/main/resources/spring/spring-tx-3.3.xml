@@ -17,19 +17,17 @@
 		<property name="userDao" ref="userDao" />
 	</bean>
 
+
 	<!-- 声明事务拦截器(advice) -->
 	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="transactionAttributes">
-			<!-- 此处声明所有方法执行事务，还可以精细控制事务(参考spring-tx-3.0) -->
+			<!-- 此处声明切入点的所有方法执行事务，还可以精细控制事务(参考spring-tx-3.0) -->
 			<props>
 				<prop key="*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
 	</bean>
-	
-	<!-- ? -->
-	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
 	
 	<!-- 常用PointAdvisor的有三种(参考spring-aop-2):DefaultPointcutAdvisor,RegexpMethodPointcutAdvisor和 NameMatchMethodPointcutAdvisor -->
 	<!-- 使用PointAdvisor包装事务Advice并指定切入点方法,这里仅展示RegexpMethodPointcutAdvisor以及 NameMatchMethodPointcutAdvisor事务拦截器Advice包装 -->
@@ -38,8 +36,8 @@
 		<!-- 使用正则表达式规则指定切入点,匹配的是方法的完整路径 例:com.java.ingo.service.impl.BaseBusiness.add -->
 		<property name="patterns">
 			<list>
-				<!-- 匹配所有方法 -->
-				<value>.*</value>
+				<!-- 正则匹配方法:batchUpdate*(..) -->
+				<value>.*batchUpdate.*</value>
 			</list>
 		</property>
 	</bean>
@@ -50,6 +48,7 @@
 		<!-- 指定切入点: 只匹配方法名，不会管类名和包名 -->
 		<property name="mappedNames">
 			<list>
+				<value>transfer*</value>
 				<value>add*</value>
 				<value>update*</value>
 				<value>delete*</value>
@@ -57,10 +56,10 @@
 		</property>
 	</bean>
 	
-	<!-- 基于BeanNameAutoProxyCreator的自动代理:配置要拦截哪些类，并使用那些拦截器 -->
+	<!-- 基于BeanNameAutoProxyCreator的自动代理:它实现了BeanPostProcessor和Ordered接口,它会根据设置的Bean名称表达式以及拦截器进行匹配来创建代理 -->
 	<!-- 通过目标类调用业务方法时，将由BeanNameAutoProxyCreator自动创建的代理来执行 -->
-	<bean id="serviceAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<!-- <property name="proxyTargetClass" value="true" /> -->
+<!-- 	<bean id="serviceAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="proxyTargetClass" value="true" />
 		<property name="beanNames">
 			<list>
 				<value>*Service</value>
@@ -68,12 +67,16 @@
 		</property>
 		<property name="interceptorNames">
 			<list>
-				<!-- 配置事务Advisor，也可配置其他AOP Advisor -->
+				配置PointcutAdvisor或transactionInterceptor
 				<value>regexpMethodPointcutAdvisor</value>
-				<!-- <value>nameMatchMethodPointcutAdvisor</value> -->
-				<!-- 事务拦截器直接配成transactionInterceptor也可以 -->
+				<value>nameMatchMethodPointcutAdvisor</value>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
+	
+	<!-- DefaultAdvisorAutoProxyCreator:自动代理所有的advisor  -->
+	<!-- 它实现了BeanPostProcessor和Ordered接口接口,当ApplicationContext读入所有的Bean配置信息后，这个类将扫描上下文，寻找所有的Advistor(一个Advisor是一个切入点和一个通知的组成),将这些Advisor应用到所有符合切入点的Bean中 -->
+	
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
 	
 </beans>

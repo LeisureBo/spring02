@@ -67,8 +67,8 @@ public class InterceptorBankServiceImplTest {
 		
 		/** spring-tx-3.2  测试专用 */
 		UserService userService = (UserService) ctx.getBean("userService");
-		User u1 = new User(1,"bo","2013455",new Account(1,100));
-		User u2 = new User(2,"lin","lin", new Account(2,100));
+		User u1 = new User(1,"bo","1111",new Account(1,100));
+		User u2 = new User(2,"lin","1809", new Account(2,100));
 		boolean result2 = userService.batchUpdateUser(u1, u2);
 		assertEquals("批量更新用户事务出错!", true, result2);
 	}

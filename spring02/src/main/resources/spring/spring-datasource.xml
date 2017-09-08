@@ -19,6 +19,8 @@
 	</bean>
 	
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 非JTA事务(即非分布式事务)需要指定dataSource属性(非分布式事务是在数据库创建的链接上开启) -->
+		<!-- JTA事务(分布式事务)不能指定dataSource属性(分布式事务是由全局事务来管理数据库链接的) -->
 		<property name="dataSource" ref="basicDataSource" />
 	</bean>
 	

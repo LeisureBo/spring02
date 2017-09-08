@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 基于 @Transactional的声明式事务管理 配置 [不支持分布式事务]-->
+	
+	<!-- 如果需要对多个数据源事务使用@Transactional注解管理,可以对每个事务管理器定义"限定符"
+		   如以下配置：@Transactional("account")指定该事务对限定符为"account"的数据源有效.
+	 -->
+	<!--
+	<bean id="txManager" class="org.springframework.jdbc.DataSourceTransactionManager">  
+ 		<property name="dataSource" ref="dataSource" />
+		<qualifier value="account"/>  
+	</bean> 
+	-->
+	
+	<!-- enable transaction annotation support -->  
+	<tx:annotation-driven transaction-manager="transactionManager" />  
+	  
+	<!-- 属性proxy-target-class="true"控制是基于接口的还是基于类的代理被创建 -->  
+	<!-- true:基于类的cglib代理将起作用(需要cglib库):只能将@Transactional放置在具体类上
+		 false(默认):标准的JDK基于接口的代理将起作用:可以将@Transactional放置在接口和具体类上
+	-->
+	
+	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	
+	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
+	<!-- springMVC配置注解扫描时应注意:
+		Spring容器优先加载由ServletContextListener(对应applicationContext.xml)产生的父容器，
+		而SpringMVC(对应mvc_dispatcher_servlet.xml)产生的是子容器。子容器Controller进行扫描装配时
+		装配的@Service注解的实例是没有经过事务加强处理，即没有事务处理能力的Service，而父容器进行初始化的Service
+		是保证事务的增强处理能力的。如果不在子容器中将Service exclude掉，此时得到的将是原样的无事务处理能力的Service。
+	 -->
+	
+	
+</beans>

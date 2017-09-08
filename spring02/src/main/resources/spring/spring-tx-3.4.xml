@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
-	<!-- 基于TransactionInterceptor的声明式事务管理:基于BeanNameAutoProxyCreator自动创建事务代理 [使用Advisor包装] -->
+	<!-- 基于TransactionInterceptor的声明式事务管理:基于DefaultAdvisorAutoProxyCreator自动创建事务代理 [不建议使用] -->
 
 	<!-- 配置目标类 -->
 	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
@@ -21,13 +21,13 @@
 	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="transactionAttributes">
-			<!-- 此处声明匹配Advisor的所有方法作为事务处理，还可以精细控制事务(参考spring-tx-3.0) -->
+			<!-- 此处声明切入点中的指定方法作为事务处理，还可以精细控制事务(参考spring-tx-3.0) -->
 			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,-ArithmeticException</prop>
 			</props>
 		</property>
 	</bean>
-	
+
 	<!-- 常用PointAdvisor的有三种(参考spring-aop-2):DefaultPointcutAdvisor,RegexpMethodPointcutAdvisor和 NameMatchMethodPointcutAdvisor -->
 	
 	<!-- 使用PointAdvisor包装事务Advice并指定切入点方法,这里仅展示RegexpMethodPointcutAdvisor以及 NameMatchMethodPointcutAdvisor事务拦截器Advice包装 -->
@@ -36,42 +36,39 @@
 		<!-- 使用正则表达式规则指定切入点,匹配的是方法的完整路径 例:com.java.ingo.service.impl.BaseBusiness.add -->
 		<property name="patterns">
 			<list>
-				<!-- 正则匹配方法:batchUpdate*(..) -->
-				<value>.*batchUpdate.*</value>
+				<!-- 正则匹配方法(全限定名):com.bo.demo.service.impl包下所有类的全部方法 -->
+				<value>com.bo.demo.service.impl.*</value>
 			</list>
 		</property>
 	</bean>
 	
 	<!-- NameMatchMethodPointcutAdvisor包装 -->
-	<bean id="nameMatchMethodPointcutAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+<!-- 	<bean id="nameMatchMethodPointcutAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice" ref="transactionInterceptor" />
-		<!-- 指定切入点: 只匹配方法名，不会管类名和包名 -->
+		指定切入点: 只匹配方法名，不会管类名和包名
 		<property name="mappedNames">
 			<list>
-				<value>transfer*</value>
 				<value>add*</value>
 				<value>update*</value>
 				<value>delete*</value>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	
-	<!-- 基于BeanNameAutoProxyCreator的自动代理:它实现了BeanPostProcessor和Ordered接口,它会根据设置的Bean名称表达式以及拦截器进行匹配来创建代理 -->
-	<!-- 通过目标类调用业务方法时，将由BeanNameAutoProxyCreator自动创建的代理来执行 -->
-	<bean id="serviceAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name="proxyTargetClass" value="true" />
-		<property name="beanNames">
-			<list>
-				<value>*Service</value>
-			</list>
-		</property>
-		<property name="interceptorNames">
-			<list>
-				<!-- 配置PointcutAdvisor或transactionInterceptor -->
-				<value>regexpMethodPointcutAdvisor</value>
-				<value>nameMatchMethodPointcutAdvisor</value>
-			</list>
-		</property>
-	</bean>
+	<!-- 定义事务Advisor 注意:该Advisor没有切入点,将使用transactionInterceptor的匹配规则织入-->
+<!-- 	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+		定义advisor时，必须传入Interceptor
+		<property name="transactionInterceptor" ref="transactionInterceptor" />
+	</bean> -->
 	
+	<!-- 
+		使用DefaultAdvisorAutoProxyCreator自动代理事务 注意:
+		当ApplicationContext读入所有的Bean配置信息后,该类将扫描上下文寻找所有Advistor并将其应用到所有符合切入点的Bean中
+		扫描的advisor的切入点需要指定具体的上下文,例如regexpMethodPointcutAdvisor正则表达式匹配的方法名需要指定包路径,
+		不能指定为"add*、update*、delete*"等模糊匹配,否则可能会切入到dateSource或jdbcTemplate等，导致循环依赖问题。
+		所以这里不建议使用无法指定具体切入点的nameMatchMethodPointcutAdvisor以及TransactionAttributeSourceAdvisor
+	 -->
+	
+	<!-- DefaultAdvisorAutoProxyCreator:自动代理所有的advisor(它实现了BeanPostProcessor和Ordered接口)(一个Advisor是一个切入点和一个通知的组成), -->
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
 </beans>

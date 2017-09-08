@@ -12,7 +12,7 @@
 	
 	<import resource="classpath:spring/spring-datasource.xml" />
 	
-	<import resource="classpath:spring/spring-tx-3.3.xml" />
+	<import resource="classpath:spring/spring-tx-4.xml" />
 	
 	
 </beans>

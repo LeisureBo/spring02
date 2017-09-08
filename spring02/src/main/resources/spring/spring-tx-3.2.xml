@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
-	<!-- 基于TransactionInterceptor的声明式事务管理:利用BeanNameAutoProxyCreator自动创建事务代理 -->
+	<!-- 基于TransactionInterceptor的声明式事务管理:基于BeanNameAutoProxyCreator自动创建事务代理 -->
 	
 	<!-- 事务管理拦截器1 -->
 	<bean id="transactionInterceptor1" class="org.springframework.transaction.interceptor.TransactionInterceptor">

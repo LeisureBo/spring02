@@ -62,10 +62,10 @@ public class InterceptorBankServiceImplTest {
 	@Test
 	public void test() throws Exception {
 		BankService bankService = (BankService) ctx.getBean("bankService");
-		boolean result = bankService.transfer(1, 2, 10);// 转账成功或失败
+		boolean result = bankService.transfer(2, 1, 10);// 转账成功或失败
 		assertEquals("转账事务出错!", true, result);
 		
-		/** spring-tx-3.2  测试专用 */
+		/** spring-tx-3.2+  测试专用 */
 		UserService userService = (UserService) ctx.getBean("userService");
 		User u1 = new User(1,"bo","1111",new Account(1,100));
 		User u2 = new User(2,"lin","1809", new Account(2,100));

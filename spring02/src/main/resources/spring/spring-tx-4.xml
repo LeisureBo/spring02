@@ -15,7 +15,6 @@
 		<!-- 指定对切入点的哪些方法加入事务管理,并指定其事务属性(不指定将使用默认值) -->
 		<tx:attributes>
 			<tx:method name="test" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" no-rollback-for="java.lang.NullPointerException" />
-			<!-- 其他示例 -->
 			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
 			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
 			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />

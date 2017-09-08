@@ -37,7 +37,7 @@ public class BankServiceImpl implements BankService {
 			Account to = bankDao.queryAccountById(toId);
 			if(from != null && to != null){
 				msg = "账号'"+fromId+"'余额不足!";
-				if(from.getAmount() > amount){
+				if(from.getAmount() >= amount){
 					from.setAmount(from.getAmount() - amount);
 					to.setAmount(to.getAmount() + amount);
 					bankDao.updateAccount(from);

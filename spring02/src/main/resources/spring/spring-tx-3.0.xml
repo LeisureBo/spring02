@@ -26,7 +26,7 @@
 	</bean>
 	
 	<!-- 配置目标类 -->
-	<bean id="bankServiceTarget" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankServiceTarget" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	
@@ -43,7 +43,7 @@
 	<bean id="bankService" parent="baseTransactionProxy">
 		<!-- 这里未声明代理接口,默认为目标类实现的所有接口 -->
 		<!-- <property name="proxyInterfaces">
-			<value>com.bo.demo.service.BankService</value>
+			<value>com.bo.spring.service.BankService</value>
 		</property> -->
 		<property name="target" ref="bankServiceTarget" />
 		<!-- 此属性指定目标类本省是否是代理的对象(默认false),如果目标类没有实现任何类,就设为true代表自己(使用cglib代理) -->

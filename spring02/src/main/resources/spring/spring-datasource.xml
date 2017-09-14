@@ -28,11 +28,11 @@
 		<property name="dataSource" ref="basicDataSource" />
 	</bean>
 	
-	<bean id="bankDao" class="com.bo.demo.dao.BankDao">
+	<bean id="bankDao" class="com.bo.spring.dao.BankDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
 
-	<bean id="userDao" class="com.bo.demo.dao.UserDao">
+	<bean id="userDao" class="com.bo.spring.dao.UserDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
 

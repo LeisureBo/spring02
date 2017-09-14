@@ -8,7 +8,7 @@
 	<!-- 基于TransactionInterceptor的声明式事务管理 [简化配置]:Spring经典的声明式事务管理-->
 	
 	<!-- 配置目标类 -->
-	<bean id="bankServiceTarget" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankServiceTarget" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	

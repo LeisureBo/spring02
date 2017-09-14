@@ -1,4 +1,4 @@
-package com.bo.demo.service.impl;
+package com.bo.spring.service.impl;
 
 import static org.junit.Assert.*;
 
@@ -12,14 +12,14 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.bo.demo.service.BankService;
+import com.bo.spring.service.BankService;
 
 /**
- * @Description 基于底层 API的编程式事务管理 测试
+ * @Description 基于TransactionTemplate的编程式事务管理 测试
  * @author 王博
- * @version 2017年9月4日　下午10:58:29
+ * @version 2017年9月5日　下午2:18:29
  */
-public class BaseBankServiceImplTest {
+public class TemplateBankServiceImplTest {
 
 	private static ApplicationContext ctx;
 	
@@ -57,14 +57,14 @@ public class BaseBankServiceImplTest {
 	}
 
 	/**
-	 * Test method for {@link com.bo.demo.service.impl.BaseBankServiceImpl#transfer(int, int, double)}.
+	 * Test method for {@link com.bo.spring.service.impl.TemplateBankServiceImpl#transfer(int, int, double)}.
 	 * @throws Exception 
 	 */
 	@Test
 	public void testTransfer() throws Exception {
-		BankService bankService = (BankService) ctx.getBean("baseBankService");
-		boolean result = bankService.transfer(2, 1, 50);// 转账成功或失败
-		assertEquals("转账事务出错!", true, result);
+		BankService templateBankService = (BankService) ctx.getBean("templateBankService");
+		boolean result = templateBankService.transfer(1, 2, 10);
+		assertEquals("转账出错", true, result);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.bo.demo.service.impl;
+package com.bo.spring.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
-import com.bo.demo.dao.BankDao;
-import com.bo.demo.entity.Account;
-import com.bo.demo.service.BankService;
+import com.bo.spring.dao.BankDao;
+import com.bo.spring.entity.Account;
+import com.bo.spring.service.BankService;
 
 /**
  * @Description 简单实现

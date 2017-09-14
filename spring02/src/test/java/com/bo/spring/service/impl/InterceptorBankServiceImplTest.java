@@ -1,4 +1,4 @@
-package com.bo.demo.service.impl;
+package com.bo.spring.service.impl;
 
 import static org.junit.Assert.*;
 
@@ -12,10 +12,10 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.bo.demo.entity.Account;
-import com.bo.demo.entity.User;
-import com.bo.demo.service.BankService;
-import com.bo.demo.service.UserService;
+import com.bo.spring.entity.Account;
+import com.bo.spring.entity.User;
+import com.bo.spring.service.BankService;
+import com.bo.spring.service.UserService;
 
 /**
  * @Description 基于TransactionInterceptor的声明式事务管理 测试

@@ -1,4 +1,4 @@
-package com.bo.demo.dao;
+package com.bo.spring.dao;
 
 import java.util.List;
 import java.sql.ResultSet;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.bo.demo.entity.Account;
+import com.bo.spring.entity.Account;
 
 /**
  * @Description 

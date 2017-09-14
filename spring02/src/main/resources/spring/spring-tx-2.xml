@@ -11,7 +11,7 @@
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 	
-	<bean id="templateBankService" class="com.bo.demo.service.impl.TemplateBankServiceImpl">
+	<bean id="templateBankService" class="com.bo.spring.service.impl.TemplateBankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 		<property name="transactionTemplate" ref="transactionTemplate" />
 	</bean>

@@ -7,7 +7,7 @@
 	
 	<!-- 基于底层 API的编程式事务管理 配置 -->
 	
-	<bean id="baseBankService" class="com.bo.demo.service.impl.BaseBankServiceImpl">
+	<bean id="baseBankService" class="com.bo.spring.service.impl.BaseBankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 		<property name="txManager" ref="transactionManager" />
 		<property name="txDefinition">

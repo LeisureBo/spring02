@@ -1,8 +1,8 @@
-package com.bo.demo.service;
+package com.bo.spring.service;
 
 import java.io.FileNotFoundException;
 
-import com.bo.demo.entity.User;
+import com.bo.spring.entity.User;
 
 /**
  * @Description 

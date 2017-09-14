@@ -8,12 +8,12 @@
 	<!-- 基于TransactionInterceptor的声明式事务管理:基于DefaultAdvisorAutoProxyCreator自动创建事务代理 [不建议使用] -->
 
 	<!-- 配置目标类 -->
-	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankService" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	
 	<!-- 配置目标类 -->
-	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+	<bean id="userService" class="com.bo.spring.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
 
@@ -36,8 +36,8 @@
 		<!-- 使用正则表达式规则指定切入点,匹配的是方法的完整路径 例:com.java.ingo.service.impl.BaseBusiness.add -->
 		<property name="patterns">
 			<list>
-				<!-- 正则匹配方法(全限定名):com.bo.demo.service.impl包下所有类的全部方法 -->
-				<value>com.bo.demo.service.impl.*</value>
+				<!-- 正则匹配方法(全限定名):com.bo.spring.service.impl包下所有类的全部方法 -->
+				<value>com.bo.spring.service.impl.*</value>
 			</list>
 		</property>
 	</bean>

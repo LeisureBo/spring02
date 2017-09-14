@@ -25,11 +25,11 @@
 		 false(默认):标准的JDK基于接口的代理将起作用:可以将@Transactional放置在接口和具体类上
 	-->
 	
-	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankService" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	
-	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+	<bean id="userService" class="com.bo.spring.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
 	

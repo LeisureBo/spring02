@@ -1,4 +1,4 @@
-package com.bo.demo.service.impl;
+package com.bo.spring.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import com.bo.demo.dao.UserDao;
-import com.bo.demo.entity.User;
-import com.bo.demo.service.UserService;
+import com.bo.spring.dao.UserDao;
+import com.bo.spring.entity.User;
+import com.bo.spring.service.UserService;
 
 /**
  * @Description 

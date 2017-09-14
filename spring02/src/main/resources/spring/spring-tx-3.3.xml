@@ -8,12 +8,12 @@
 	<!-- 基于TransactionInterceptor的声明式事务管理:基于BeanNameAutoProxyCreator自动创建事务代理 [使用Advisor包装] -->
 
 	<!-- 配置目标类 -->
-	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankService" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	
 	<!-- 配置目标类 -->
-	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+	<bean id="userService" class="com.bo.spring.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
 

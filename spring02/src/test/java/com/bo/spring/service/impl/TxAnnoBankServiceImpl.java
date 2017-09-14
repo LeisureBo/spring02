@@ -1,4 +1,4 @@
-package com.bo.demo.service.impl;
+package com.bo.spring.service.impl;
 
 import static org.junit.Assert.*;
 
@@ -12,14 +12,16 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.bo.demo.service.BankService;
+import com.bo.spring.entity.Account;
+import com.bo.spring.entity.User;
+import com.bo.spring.service.UserService;
 
 /**
- * @Description 基于TransactionTemplate的编程式事务管理 测试
+ * @Description 基于 @Transactional的声明式事务管理 测试
  * @author 王博
- * @version 2017年9月5日　下午2:18:29
+ * @version 2017年9月8日　下午10:40:11
  */
-public class TemplateBankServiceImplTest {
+public class TxAnnoBankServiceImpl {
 
 	private static ApplicationContext ctx;
 	
@@ -56,15 +58,13 @@ public class TemplateBankServiceImplTest {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * Test method for {@link com.bo.demo.service.impl.TemplateBankServiceImpl#transfer(int, int, double)}.
-	 * @throws Exception 
-	 */
 	@Test
-	public void testTransfer() throws Exception {
-		BankService templateBankService = (BankService) ctx.getBean("templateBankService");
-		boolean result = templateBankService.transfer(1, 2, 10);
-		assertEquals("转账出错", true, result);
+	public void test() throws Exception {
+		UserService userService = (UserService) ctx.getBean("userService");
+		User u1 = new User(1,"bo","1111",new Account(1,100));
+		User u2 = new User(2,"lin","1809", new Account(2,100));
+		boolean result2 = userService.NonTransactionUpdate(u1, u2);
+		assertEquals("tx更新用户出错!", true, result2);
 	}
 
 }

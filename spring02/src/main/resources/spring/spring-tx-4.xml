@@ -7,11 +7,11 @@
 	
 	<!-- 基于 <tx>命名空间的声明式事务管理 配置-->
 	
-	<bean id="bankService" class="com.bo.demo.service.impl.BankServiceImpl">
+	<bean id="bankService" class="com.bo.spring.service.impl.BankServiceImpl">
 		<property name="bankDao" ref="bankDao" />
 	</bean>
 	
-	<bean id="userService" class="com.bo.demo.service.impl.UserServiceImpl">
+	<bean id="userService" class="com.bo.spring.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
 	
@@ -29,7 +29,7 @@
 	
 	<!-- aop代理设置:<aop:config proxy-target-class="true"> true:使用基于类的代理(cglib),适用于目标类无实现接口的情况  false:使用基于接口的JDK动态代理  -->
 	<aop:config>
-		<aop:pointcut id="bankPointcut" expression="execution(* com.bo.demo.service.impl.*.*(..))" />
+		<aop:pointcut id="bankPointcut" expression="execution(* com.bo.spring.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="bankAdvice" pointcut-ref="bankPointcut" />
 	</aop:config>
 </beans>

@@ -20,7 +20,7 @@ public class UserDao implements RowMapper<User>{
 	private JdbcTemplate jdbcTemplate;
 
 	public int insertUser(User user){
-		String sql = "insert into user(username,password,account_id) values(?)";
+		String sql = "insert into user(username,password,account_id) values(?,?,?)";
 		return jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getAccount().getId());
 	}
 	

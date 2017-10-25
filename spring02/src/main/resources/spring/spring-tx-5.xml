@@ -17,7 +17,7 @@
 	</bean> 
 	-->
 	
-	<!-- enable transaction annotation support -->  
+	<!-- enable transaction annotation support (多数据源时无需指定transactionManager)-->  
 	<tx:annotation-driven transaction-manager="transactionManager" />  
 	  
 	<!-- 属性proxy-target-class="true"控制是基于接口的还是基于类的代理被创建 -->  
